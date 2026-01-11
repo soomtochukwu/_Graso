@@ -1,9 +1,9 @@
 import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import sui from "../../../src/assets/sui.png";
+import mnt from "../../../src/assets/mnt.png";
 import Timer from "../Timer";
-import { ConnectButton } from "@mysten/dapp-kit";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import assetImage from "../../assets/exploreCardImg.svg"
 
 
@@ -46,7 +46,8 @@ const HomeExploreCard = ({ data }) => {
             <div className="flex justify-between items-center">
               <small>Targeted Raise</small>
               <div className="flex items-center gap-x-2">
-                <img src={sui} alt="Sui" className="w-4 h-4" />
+                {/* <img src={mnt} alt="MNT" className="w-4 h-4" /> */}
+                MNT
                 <h2>{data.target.toLocaleString()} </h2>
               </div>
             </div>
@@ -82,7 +83,7 @@ const HomeExploreCard = ({ data }) => {
           <div className="flex justify-between items-center gap-4 pt-4">
             <div>
               <small className="font-semibold">Min.Entry</small>
-              <h1 className="text-teal-500 font-semibold">2.95 SUI</h1>
+              <h1 className="text-teal-500 font-semibold">2.95 MNT</h1>
             </div>
             <button
               className="hidden md:block bg-[#24c2a5] px-4 py-2 rounded-full text-white hover:bg-white hover:text-[#24C2A5] transition-all duration-300"
@@ -122,10 +123,10 @@ const HomeExploreCard = ({ data }) => {
                 <strong>Description:</strong> {data.description}
               </p>
               <p>
-                <strong>Targeted Raise:</strong> {data.target.toLocaleString()} SUI
+                <strong>Targeted Raise:</strong> {data.target.toLocaleString()} MNT
               </p>
               <p>
-                <strong>Min. Entry:</strong> 2.95 SUI
+                <strong>Min. Entry:</strong> 2.95 MNT
               </p>
             </div>
 
@@ -146,10 +147,7 @@ const HomeExploreCard = ({ data }) => {
                 Cancel
               </button>
 
-              <ConnectButton
-                className="!bg-[#24c2a5] !hover:bg-[#1da88d] !px-4 !py-2  !text-white !rounded-lg   "
-                connectText=" Confirm Investment"
-              />
+              <ConnectButton label="Confirm Investment" />
             </div>
 
             {isAvailable && (

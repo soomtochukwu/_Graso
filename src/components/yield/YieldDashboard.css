@@ -1,0 +1,244 @@
+.yield-dashboard {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.yield-dashboard-empty {
+    text-align: center;
+    color: #666;
+    padding: 48px;
+}
+
+.yield-header {
+    margin-bottom: 24px;
+}
+
+.yield-header h2 {
+    font-size: 22px;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+}
+
+.yield-subtitle {
+    color: #666;
+    font-size: 14px;
+}
+
+.yield-property-info {
+    background: linear-gradient(135deg, #f8fffe 0%, #e6f9f5 100%);
+    border: 1px solid #24C2A5;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+}
+
+.yield-property-info h3 {
+    color: #0d6b4d;
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.yield-property-meta {
+    display: flex;
+    gap: 24px;
+    font-size: 13px;
+    color: #666;
+}
+
+.yield-property-meta strong {
+    color: #24C2A5;
+}
+
+.yield-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+@media (max-width: 768px) {
+    .yield-stats {
+        grid-template-columns: 1fr;
+    }
+}
+
+.yield-stat-card {
+    background: #f9f9f9;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.yield-stat-highlight {
+    background: linear-gradient(135deg, #24C2A5 0%, #1da88d 100%);
+    color: white;
+}
+
+.yield-stat-highlight .yield-stat-label,
+.yield-stat-highlight .yield-stat-sub {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.yield-stat-label {
+    font-size: 13px;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.yield-stat-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+.yield-stat-highlight .yield-stat-value {
+    color: white;
+}
+
+.yield-stat-sub {
+    font-size: 12px;
+    color: #666;
+}
+
+.yield-actions {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.yield-claim-btn {
+    flex: 1;
+    background: linear-gradient(135deg, #24C2A5 0%, #1da88d 100%);
+    color: white;
+    border: none;
+    padding: 16px 24px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.yield-claim-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(36, 194, 165, 0.3);
+}
+
+.yield-claim-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.yield-refresh-btn {
+    background: transparent;
+    color: #24C2A5;
+    border: 2px solid #24C2A5;
+    padding: 16px 24px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.yield-refresh-btn:hover {
+    background: #24C2A5;
+    color: white;
+}
+
+.yield-kyc-warning {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #fff5f5;
+    border: 1px solid #ff6b6b;
+    border-radius: 10px;
+    padding: 16px 20px;
+    color: #c53030;
+}
+
+.yield-success-message {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: #e6fff7;
+    border: 1px solid #24C2A5;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+}
+
+.yield-success-message span {
+    background: #24C2A5;
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.yield-success-message p {
+    margin-bottom: 4px;
+    color: #0d6b4d;
+}
+
+.yield-success-message a {
+    color: #24C2A5;
+    font-size: 13px;
+}
+
+.yield-error-message {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #fff5f5;
+    border: 1px solid #ff6b6b;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    color: #c53030;
+}
+
+.yield-info-box {
+    background: #f5f5f5;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 24px;
+}
+
+.yield-info-box h4 {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 12px;
+}
+
+.yield-info-box ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.yield-info-box li {
+    font-size: 13px;
+    color: #666;
+    padding: 6px 0;
+    padding-left: 20px;
+    position: relative;
+}
+
+.yield-info-box li::before {
+    content: '•';
+    color: #24C2A5;
+    position: absolute;
+    left: 0;
+}

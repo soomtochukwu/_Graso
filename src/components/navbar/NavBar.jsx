@@ -1,43 +1,21 @@
 import { useEffect, useState } from "react";
-import { ConnectButton, useCurrentAccount } from "@mysten/dapp-kit";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useAccount } from "wagmi";
 import { useNavigate } from "react-router-dom";
 import { FiX, FiAlignCenter } from "../../utils/icons";
 import NavList from "./NavList";
 import grasoLogo from "../../assets/grasoLogo.png";
 
 function Navbar() {
-  const currentAccount = useCurrentAccount();
+  const { address, isConnected } = useAccount();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    if (currentAccount) {
+    if (isConnected && address) {
       navigate("/app");
     }
-  }, [currentAccount, navigate]);
-
-  // useEffect(() => {
-  //   async function sign() {
-  //     const dats = {
-  //       wallet:
-  //         "0x7b299e438e7312e14507a2dbda2bee64231755e3fbb6a218ba7d26f2751a83d2",
-  //       nonce:
-  //         "8c56081b2c2f6dfb11d8c1f45ad9753bc2ad72f3d0263f7d7320266166dc1520",
-  //       signature:
-  //         "0x7b299e438e7312e14507a2dbda2bee64231755e3fbb6a218ba7d26f2751a83d2",
-  //     };
-  //     const res = await fetch(
-  //       "https://web-production-6417.up.railway.app/verify_signature",
-  //       {
-  //         method: "POST",
-  //         body: JSON.stringify(dats),
-  //       }
-  //     );
-  //     const data = await res.json();
-  //     console.log(data);
-  //   }
-  //   sign();
-  // }, []);
+  }, [isConnected, address, navigate]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -82,13 +60,13 @@ function Navbar() {
           <NavList navLink="Whitepaper" path="https://graso.gitbook.io/graso" />
           <NavList navLink="About Us" path="/about-us" />
           <div className="custom-connect-button hidden max-sm:block">
-            <ConnectButton connectText="Get started" />
+            <ConnectButton label="Get started" />
           </div>
         </ul>
       </div>
       <div className="max-md:flex max-sm:justify-end max-md:space-x-5">
         <div className="custom-connect-button max-sm:hidden">
-          <ConnectButton connectText="Get started" />
+          <ConnectButton label="Get started" />
         </div>
         <button
           className="z-10 text-center hidden max-md:flex max-md:justify-center max-md:items-center"

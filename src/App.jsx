@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/home-page/HomePage";
 import LoadingPage from "./pages/loading-page/LoadingPage";
 import Dashboard from "./components/dashboard/Dashboard";
+import InvestorDashboard from "./components/dashboard/InvestorDashboard";
 import ExploreLand from "./components/explore-land/ExploreLand";
 import AddProperties from "./components/add-properties/AddProperties";
 import Profile from "./components/profile/Profile";
@@ -40,6 +41,7 @@ function App() {
           <Route path="app" element={<AppLayout />}>
             <Route index element={<Navigate replace to="dashboard" />} />
             <Route path="dashboard" element={<Dashboard />} />
+            <Route path="investor" element={<InvestorDashboard />} />
             <Route path="explore-properties" element={<ExploreLand />} />
             <Route path="add-properties" element={<AddProperties />} />
             <Route path="user">
@@ -56,3 +58,4 @@ function App() {
   );
 }
 export default App;
+

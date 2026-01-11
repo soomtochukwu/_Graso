@@ -1,0 +1,156 @@
+.custody-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.custody-badge.custody-self {
+    background: #e6f9f5;
+    color: #0d6b4d;
+    border: 1px solid #24C2A5;
+}
+
+.custody-badge.custody-platform {
+    background: #e6f0ff;
+    color: #1a56db;
+    border: 1px solid #3b82f6;
+}
+
+.custody-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+}
+
+.custody-label.custody-self {
+    background: linear-gradient(135deg, #e6fff7 0%, #ccfff0 100%);
+    border: 1px solid #24C2A5;
+}
+
+.custody-label.custody-platform {
+    background: linear-gradient(135deg, #e6f0ff 0%, #cce0ff 100%);
+    border: 1px solid #3b82f6;
+}
+
+.custody-icon {
+    font-size: 28px;
+}
+
+.custody-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.custody-type {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.custody-label.custody-self .custody-type {
+    color: #0d6b4d;
+}
+
+.custody-label.custody-platform .custody-type {
+    color: #1a56db;
+}
+
+.custody-description {
+    font-size: 13px;
+    color: #666;
+}
+
+/* Explainer styles */
+.custody-explainer {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.custody-explainer h3 {
+    font-size: 20px;
+    color: #1a1a1a;
+    margin-bottom: 20px;
+}
+
+.custody-option {
+    background: #f9f9f9;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+}
+
+.custody-option-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.custody-option-icon {
+    font-size: 24px;
+}
+
+.custody-option h4 {
+    font-size: 16px;
+    color: #333;
+    margin: 0;
+}
+
+.custody-option p {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 12px;
+}
+
+.custody-option ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.custody-option li {
+    font-size: 13px;
+    color: #666;
+    padding: 4px 0;
+    padding-left: 20px;
+    position: relative;
+}
+
+.custody-option li::before {
+    content: '✓';
+    color: #24C2A5;
+    position: absolute;
+    left: 0;
+    font-weight: bold;
+}
+
+.custody-disclaimer {
+    display: flex;
+    gap: 12px;
+    background: #fff8e6;
+    border: 1px solid #ffd666;
+    border-radius: 10px;
+    padding: 16px;
+    margin-top: 20px;
+}
+
+.custody-disclaimer span {
+    font-size: 18px;
+}
+
+.custody-disclaimer p {
+    font-size: 13px;
+    color: #7a6200;
+    margin: 0;
+    line-height: 1.5;
+}

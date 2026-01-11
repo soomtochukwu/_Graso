@@ -1,7 +1,4 @@
-import { Transaction } from "@mysten/sui/transactions";
-import {  useCurrentAccount } from "@mysten/dapp-kit";
-import { useSignAndExecuteTransaction, useSuiClient } from "@mysten/dapp-kit";
-import { useNetworkVariable } from "../../utils/networkConfig";
+import { useAccount } from "wagmi";
 import "./profile-settings.css";
 import { useState } from "react";
 
@@ -12,58 +9,26 @@ function ProfileSettings() {
   const [occupation, setOccupation] = useState("");
   const [description, setDescription] = useState("");
 
-
-  const realEstateICOPackageId = useNetworkVariable("realEstateICOPackageId");
-  
-  const suiClient = useSuiClient();
-  const { mutate: signAndExecute } = useSignAndExecuteTransaction({
-    execute: async ({ bytes, signature }) =>
-      await suiClient.executeTransactionBlock({
-        transactionBlock: bytes,
-        signature,
-        options: {
-          showRawEffects: true,
-          showEffects: true,
-        },
-      }),
-  });
+  const { isConnected, address } = useAccount();
 
   const createProfile = () => {
     if(firstName === "" || lastName === "" || email === "" || occupation === "" || description === "" ){
       return;
     }
 
-    const tx = new Transaction();
-    
-    tx.moveCall({
-      target: `${realEstateICOPackageId}::real_estate_ido::create_profile`
-,
-      arguments: [
-        tx.pure.address('0xc07806106468ad7e77577db4f8d0827a46ad1fd43632eb8231f431601620dde8'),
-        tx.pure.string(firstName),
-        tx.pure.string(lastName),
-        tx.pure.string(email),
-        tx.pure.string(occupation),
-        tx.pure.string(description),
-        tx.pure.bool(true),
-      ]
+    // Profile creation would be handled by backend/database
+    // For now, just log the profile data
+    console.log("Profile data:", {
+      address,
+      firstName,
+      lastName,
+      email,
+      occupation,
+      description
     });
-
-    tx.setGasBudget(20000000);
-
-    signAndExecute(
-      {
-        transaction: tx,
-      },
-      {
-        onSuccess: async() => {
-          console.log("Profile updated");
-        },
-      }
-    );
+    
+    alert("Profile saved locally. On-chain profile creation coming soon!");
   }
-
-
 
   return (
     <div className="profile-wrapper">

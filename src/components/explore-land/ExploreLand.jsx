@@ -1,19 +1,18 @@
 import { useState, useEffect } from "react";
-import { useCurrentAccount } from "@mysten/dapp-kit";
+import { useAccount } from "wagmi";
 import LoadingPage from "../../pages/loading-page/LoadingPage";
 import landsite from "../../assets/landsite.jpg";
 import ExploreCard from "../explore/ExploreCard";
-// import { exploreData } from "../../../data/exploreData";
 import { getAllProperties } from "../../utils";
 
 function ExploreLand() {
-  const currentAccount = useCurrentAccount();
+  const { isConnected } = useAccount();
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProjects = async () => {
-      if (!currentAccount) {
+      if (!isConnected) {
         setLoading(false);
         return;
       }
@@ -27,7 +26,7 @@ function ExploreLand() {
       }
     };
     fetchProjects();
-  }, [currentAccount]);
+  }, [isConnected]);
 
   if(loading) {
     return (
@@ -58,6 +57,7 @@ function ExploreLand() {
 }
 
 export default ExploreLand;
+
 const ExploreCardModal = ({ data, onClose }) => {
   if (!data) return null;
 
@@ -80,10 +80,10 @@ const ExploreCardModal = ({ data, onClose }) => {
             <strong>Description:</strong> {data?.description}
           </p>
           <p className="text-gray-600">
-            <strong>Targeted Raise:</strong> 200,000 SUI
+            <strong>Targeted Raise:</strong> 200,000 MNT
           </p>
           <p className="text-gray-600">
-            <strong>Min. Entry:</strong> 2.95 SUI
+            <strong>Min. Entry:</strong> 2.95 MNT
           </p>
         </div>
 
@@ -115,5 +115,3 @@ const ExploreCardModal = ({ data, onClose }) => {
     </div>
   );
 };
-
-// export default ExploreCardModal;

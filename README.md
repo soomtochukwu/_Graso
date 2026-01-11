@@ -1,102 +1,215 @@
-# GRASO
+# GRASO - Mantle Sepolia Edition
 
-Graso is a decentralized platform powered by the Sui Network, providing developers and individual investors access to the real estate market. By leveraging blockchain technology, it ensures transparency, security, and efficiency in property transactions. Supported by the Sui on Campus initiative. [Learn More](https://graso.gitbook.io)
+Graso is a decentralized real estate investment platform powered by **Mantle Network**. Invest in fractional property ownership using cryptocurrency with full blockchain transparency.
 
-## Table of Contents
+> **⚠️ This is the Mantle Sepolia Testnet version for development and testing.**
 
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
+## Quick Start
 
-## Installation
+### Prerequisites
+- Node.js 18+
+- MetaMask wallet with Mantle Sepolia network configured
+- Test MNT tokens from faucet
 
-Step-by-step instructions to set up the project locally:
+### 1. Clone and Install
 
-1. **Install an [SUI](https://sui.io)-compatible wallet on your device:**
-   
-  - Sui Wallet (Recommended)
-    
-    - [iOS device](https://apps.apple.com/us/app/sui-wallet-mobile/id6476572140)
-    - [Andriod Device](https://play.google.com/store/apps/details?id=com.mystenlabs.suiwallet)
-    - [Chrome Extension](https://chrome.google.com/webstore/detail/sui-wallet/opcgpfmipidbgpenhmajoajpbobppdil)
-      
-  - [Suiet](https://suiet.app/)
-  - [Phantom](https://phantom.com/)
+```bash
+git clone <repository-url>
+cd grs
+npm install
+```
 
-2. **Create a new wallet:**
-   
-   Whether you’re using the browser extension or mobile app, creating a new Sui Wallet involves a similar process:
-   
-     - [Browser Extension](https://docs.suiwallet.com/quickstart#browser-extension-1)
-     - [Mobile Wallet
-](https://docs.suiwallet.com/quickstart#mobile-wallet)
+### 2. Configure Environment
 
-    or 
+```bash
+cp .env.example .env
+# Edit .env with your values
+```
 
-    [Import an Existing Sui Wallet](https://docs.suiwallet.com/quickstart#importing-an-existing-sui-wallet)
+### 3. Deploy Smart Contracts
 
-4. **Switch Network to Testnet:**
-   
-    - Graso smart contract is currently hosted on the testnet network to allow users interact with our blockchain powered project without having to risk real funds.
-      
-    ![image](https://github.com/user-attachments/assets/d9e29852-55de-437f-a002-c8f2d727abe3)
-    ![image](https://github.com/user-attachments/assets/64abf22f-81e4-4fd0-8962-abaac4976db7) 
+```bash
+cd contracts
+cp .env.example .env
+# Add your DEPLOYER_PRIVATE_KEY to .env
 
-6. **Request Sui Testnet**
-   
-   Request testnet tokens from the sui.io testnet faucet to allow you make testnet transactions on Graso
-  - [Sui Testnet Faucet](https://faucet.sui.io/)
+npm install
+npm run compile
+npm run deploy
+# Copy the deployed contract addresses to frontend .env
+```
 
-## Usage
+### 4. Run the App
 
-  - Visit [Graso](https://grasoo.vercel.app/)
-      ![image](https://github.com/user-attachments/assets/6e100f37-ab93-4d2f-831b-6eb385ae7f62)
-    
-  - Connect Wallet to access your dashboard
-      ![image](https://github.com/user-attachments/assets/684f990c-0851-45a3-88db-2990c187300f)
-      ![image](https://github.com/user-attachments/assets/8c35ed68-4c76-40f6-b7e5-f3738df678f0)
+```bash
+npm run dev
+# Open http://localhost:5173
+```
 
-  - Visit the **Explore Properties** page in your dashboard to access active property listings
-      ![image](https://github.com/user-attachments/assets/3e1295d7-9cb4-439f-ad99-67efda2dbb46)
+---
 
-      - You can interact with active listings ¬by funding them with testnet tokens and receiving some tokens in exchange. The token you received is a digital on-chain representation of your purchased fraction on the asset
-        ![image](https://github.com/user-attachments/assets/5d4f532a-25ed-49d0-b132-4d3b54a8ad7b)
+## Features
 
-  - You can also check out the **Add Property** page to add your property to the Explore page, where you will be charged a tiny fee to list a property.
-      - When listing your property, you will be asked to provide some simple details
-        - Property image
-        - Title
-        - Type of property
-        - Price (This will be calculated in SUI)
-        - Description
-        - Listing duration
-        - Location
-      ![image](https://github.com/user-attachments/assets/48359b98-b22d-4200-97dd-d9b14547ae70)
+### 🏠 Real Estate Tokenization
+
+The platform tokenizes real estate assets using ERC-20 tokens, enabling fractional ownership:
+
+- **Fractional Ownership**: Each property token represents a share of the property
+- **Fixed Supply**: Properties have a capped number of ownership units
+- **Transparent Pricing**: Token prices set at property creation
+- **On-chain Metadata**: Property details stored on blockchain
+
+**PropertyToken Contract Functions:**
+```solidity
+buyTokens(amount)          // Purchase ownership tokens
+getPropertyInfo()          // View property details
+balanceOf(address)         // Check token balance
+getOwnershipPercentage()   // View ownership %
+```
+
+### 🔐 KYC Verification (Simulated)
+
+The platform demonstrates compliance-aware access control:
+
+- **Verification Flow**: Multi-step identity verification modal
+- **On-chain Status**: KYC status stored in contract
+- **Gated Access**: Only verified users can invest/claim yield
+
+> **Note**: This is a simulated KYC flow for demo purposes. No real identity data is stored on-chain.
+
+**How it works:**
+1. User attempts to invest
+2. If unverified, KYC modal appears
+3. User completes verification form
+4. Admin approves on-chain (demo auto-approves)
+5. User can now invest
+
+### 🏦 Custody Models
+
+The dashboard displays custody status to demonstrate asset holding patterns:
+
+| Model | Description |
+|-------|-------------|
+| **Self-Custody** | Tokens held in user's wallet (direct control) |
+| **Platform Custody** | Tokens staked in protocol (enhanced yield) |
+
+Users can see their custody status and understand where assets are held.
+
+### 💰 Yield Distribution
+
+Property managers can deposit rent, distributed proportionally to token holders:
+
+- **Proportional Distribution**: Yield based on ownership percentage
+- **KYC Gated**: Only verified users can claim
+- **Transparent**: All transactions on Mantle Sepolia explorer
+- **Real-time**: Dashboard shows claimable yield
+
+**Yield Contract Functions:**
+```solidity
+depositRent()              // Admin deposits rent (payable)
+claimYield()               // User claims accumulated yield
+getYieldOwed(address)      // Check pending yield
+getTotalYieldClaimed()     // View historical claims
+```
+
+---
+
+## Mantle Sepolia Network Setup
+
+Add to MetaMask manually or the app will prompt you automatically:
+
+| Setting | Value |
+|---------|-------|
+| Network Name | Mantle Sepolia Testnet |
+| RPC URL | `https://rpc.sepolia.mantle.xyz` |
+| Chain ID | `5003` |
+| Currency Symbol | `MNT` |
+| Block Explorer | `https://explorer.sepolia.mantle.xyz` |
+
+### Get Test MNT Tokens
+Visit the [Mantle Sepolia Faucet](https://faucet.sepolia.mantle.xyz) to get test tokens.
+
+---
+
+## Project Structure
+
+```
+grs/
+├── contracts/                    # Solidity smart contracts
+│   ├── contracts/
+│   │   ├── RealEstateIDO.sol     # Property listings
+│   │   └── PropertyToken.sol     # Tokenization + yield
+│   └── scripts/deploy.js         # Deployment script
+├── src/
+│   ├── components/
+│   │   ├── kyc/                  # KYC modal & banner
+│   │   ├── yield/                # Yield dashboard
+│   │   ├── custody/              # Custody labels
+│   │   └── dashboard/            # Investor dashboard
+│   ├── hooks/
+│   │   ├── useKYC.ts             # KYC state management
+│   │   └── useYield.ts           # Yield calculations
+│   ├── config/                   # Network configuration
+│   └── smart-contract/           # Contract ABIs
+└── public/
+```
+
+---
+
+## Smart Contracts
+
+### RealEstateIDO.sol
+Manages property crowdfunding campaigns:
+- `createProperty()` - Create a new listing
+- `contribute()` - Invest in a campaign
+- `withdraw()` - Withdraw funds (creator only)
+
+### PropertyToken.sol
+ERC-20 tokenization with compliance features:
+- `buyTokens()` - Purchase property shares
+- `claimYield()` - Claim rental income
+- `setVerified()` - Admin KYC approval
+- `depositRent()` - Admin deposits rent
+
+---
+
+## Disclaimers
+
+> ⚠️ **TESTNET DEMO**
+> 
+> This application is a demonstration running on Mantle Sepolia testnet:
+> - All tokens and transactions use test MNT with no real value
+> - KYC verification is simulated - no real identity verification
+> - No legal claims to real estate ownership are implied
+> - This is not investment advice
+
+> 🔒 **SECURITY**
+> 
+> - Never commit private keys
+> - `.env` files are in `.gitignore`
+> - Smart contracts are unaudited demo code
+
+---
+
+## Tech Stack
+
+- **Frontend**: React + Vite
+- **Wallet**: RainbowKit + wagmi + viem
+- **Blockchain**: Mantle Sepolia Testnet (EVM)
+- **Smart Contracts**: Solidity + Hardhat + OpenZeppelin
+- **Storage**: Pinata (IPFS)
+
+---
 
 ## Contributing
 
-Guidelines for contributing to the project:
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Commit changes: `git commit -m 'Add feature'`
+4. Push to branch: `git push origin feature/your-feature`
+5. Open a pull request
 
-1. Fork the repository.
-2. Create a new branch:
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-3. Make your changes and commit them:
-   ```bash
-   git commit -m 'Add some feature'
-   ```
-4. Push to the branch:
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-5. Open a pull request.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+---
 
 ## Contact
 
@@ -104,17 +217,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **GitHub:** [AfroTechBoss](https://github.com/AfroTechBoss)
 - **Twitter:** [@0xAfroTechBoss](https://x.com/0xAfroTechBoss)
 
+---
 
-**Notes:**
+## License
 
-- Graso is currently a prototype of the actual idea, meaning we are making it as accessible to everyone.
-- Property listing will only be accessible to verified real estate developers after launch.
-- We are looking to request more information from real estate developers after launch.
-- We will add security measures to ensure that every property listed is verified, and 100% safe for investment.
-- We would love feedback from you.
-
-**Follow Graso on Social Media:**
-  - [Twitter](https://x.com/GrasoOrg)
-  - [Instagram](https://instagram.com/grasoorg)
-  - [LinkedIn](https://linkedin.com/company/grasoorg/)
-  - [Gitbook](https://graso.gitbook.io/)
+MIT License - see [LICENSE](LICENSE)

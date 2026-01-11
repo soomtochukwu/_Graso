@@ -1,13 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import { useSignAndExecuteTransaction } from '@mysten/dapp-kit';
+import { useAccount } from "wagmi";
 import { createProperty } from "../../utils";
 import { useNavigate } from "react-router-dom";
-import { Transaction } from "@mysten/sui/transactions";
-import {
-  useCurrentAccount,
-  useSuiClient,
-} from "@mysten/dapp-kit";
-import { useNetworkVariable } from "../../utils/networkConfig";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { OpenStreetMapProvider, GeoSearchControl } from "leaflet-geosearch";
@@ -16,7 +10,7 @@ import "./addproperties.css";
 import { uploadFileToPinata } from "../../utils/api/files/route";
 
 function AddProperties() {
-  const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
+  const { isConnected, address } = useAccount();
   const navigate = useNavigate();
 
   const [description, setDescription] = useState("");
@@ -30,16 +24,13 @@ function AddProperties() {
 	const [cid, setCid] = useState("");
   const [propertytype, setPropertytype] = useState("");
   const [uploading, setUploading] = useState(false);
-  const [_digest, setDigest] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isMapModalOpen, setIsMapModalOpen] = useState(false);
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const searchControlRef = useRef(null);
   const markerRef = useRef(null);
   const inputFile = useRef(null);
-
-
-  const currentAccount = useCurrentAccount();
 
   useEffect(() => {
     if (isMapModalOpen && mapRef.current && !mapInstanceRef.current) {
@@ -106,8 +97,6 @@ function AddProperties() {
     }
   };
 
-
-
   const handleStartDateChange = (e) => {
     const date = e.target.value;
     setStartDate(date);
@@ -122,16 +111,13 @@ function AddProperties() {
     try {
       setUploading(true);
   
-      // Prepare a simulated request object with formData
       const formData = new FormData();
       formData.append("file", fileToUpload, `${fileToUpload.name}`);
   
-      // Simulating the request object that `uploadFileToPinata` expects
       const simulatedRequest = {
-        formData: async () => formData, // Create a function returning the formData
+        formData: async () => formData,
       };
   
-      // Call the uploadFileToPinata function with the simulated request
       const response = await uploadFileToPinata(simulatedRequest);
   
       if (response?.data?.IpfsHash) {
@@ -153,37 +139,37 @@ function AddProperties() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!isConnected) {
+      alert("Please connect your wallet first");
+      return;
+    }
+
     const deadlineTimestamp = Math.floor(new Date(endDate).getTime() / 1000);
     
+    setIsSubmitting(true);
+    
     try {
-       
-        const trx = await createProperty(
-           title,
-           description,
-           cid,
-           propertytype,
-           price,
-           deadlineTimestamp,
-           lat,
-           lng
-        );
+      const txHash = await createProperty(
+        title,
+        description,
+        cid,
+        propertytype,
+        price,
+        deadlineTimestamp,
+        lat,
+        lng
+      );
 
-        signAndExecuteTransaction({
-            transaction: trx,
-            chain: 'sui:testnet',
-        }, {
-            onSuccess: ({digest}) => {
-                navigate('/app/explore-properties');
-                setDigest(digest);
-            },
-            onError: (error) => {
-                console.error('Error creating Project:', error);
-            }
-        });
+      console.log("Property created, tx hash:", txHash);
+      navigate('/app/explore-properties');
     } catch (error) {
-        console.error('Error:', error);
+      console.error('Error creating property:', error);
+      alert("Error creating property. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
-};
+  };
 
 
   return (
@@ -245,10 +231,10 @@ function AddProperties() {
               </span>
 
               <span className="coordinates">
-                <h1>Price:</h1>
+                <h1>Price (MNT):</h1>
                 <input
                   type="number"
-                  placeholder="Price"
+                  placeholder="Price in MNT"
                   value={price || ""}
                   onChange={(e) => {
                     const value = Number(e.target.value);
@@ -315,7 +301,9 @@ function AddProperties() {
                 </div>
               </div>
 
-              <button type="submit" onClick={handleSubmit}>Add Property</button>
+              <button type="submit" onClick={handleSubmit} disabled={isSubmitting}>
+                {isSubmitting ? "Creating..." : "Add Property"}
+              </button>
             </form>
           </div>
         </div>
