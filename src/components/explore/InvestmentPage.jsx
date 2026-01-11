@@ -1,25 +1,19 @@
 import React, { useState, useEffect } from "react";
 import landsite from "../../assets/landsite.jpg"; 
-import sui from "../../assets/sui.png"; 
+import mnt from "../../assets/mnt.png"; 
 import { useLocation, useNavigate } from "react-router-dom";
-import { ConnectButton, useCurrentAccount } from "@mysten/dapp-kit";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useAccount } from "wagmi";
 
 export default function InvestmentPage({ data }) {
   const [isAvailable, setIsAvailable] = useState(false);
   const location = useLocation();
-  const currentAccount = useCurrentAccount();
+  const { isConnected } = useAccount();
   const navigate = useNavigate();
 
   // Check if the previous route is the homepage
-  const previousRoute = location.state?.from;  // Access the 'from' state passed during navigation
+  const previousRoute = location.state?.from;
   const isHomePage = previousRoute === '/';
-
-
-  // useEffect(() => {
-  //   if (currentAccount && !isHomePage) {
-  //     navigate("/app");
-  //   }
-  // }, [currentAccount, navigate]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 "> 
@@ -36,10 +30,10 @@ export default function InvestmentPage({ data }) {
             <strong>Description:</strong> {data?.description || "Sample property description."}
           </p>
           <p className="text-gray-600">
-            <strong>Targeted Raise:</strong> 200,000 SUI
+            <strong>Targeted Raise:</strong> 200,000 MNT
           </p>
           <p className="text-gray-600">
-            <strong>Min. Entry:</strong> 2.95 SUI
+            <strong>Min. Entry:</strong> 2.95 MNT
           </p>
         </div>
 
@@ -68,26 +62,17 @@ export default function InvestmentPage({ data }) {
               textAlign: "left"
             }}
           />
-          <img src={sui} alt="Sui" className="w-[1.5rem] h-[1.5rem] absolute right-1 top-[2rem]" />
+          <img src={mnt} alt="MNT" className="w-[1.5rem] h-[1.5rem] absolute right-1 top-[2rem]" />
         </span>
 
         {/* Modal Actions */}
         <div className="mt-6 flex justify-between gap-4">
           <button
             className="px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500"
-            onClick={() => window.history.back()} // Navigate back to the previous page
+            onClick={() => window.history.back()}
           >
             Cancel
           </button>
-          {/* {isHomePage ? (
-            <button className="px-4 py-2 bg-[#24c2a5] text-white rounded-lg hover:bg-[#1da88d]" onClick={() => setIsAvailable(true)}>
-              Confirm Investment
-            </button>
-          ) : (
-            <div className="buttonInvest">
-              <ConnectButton connectText="Confirm Investment" />
-            </div>
-          )} */}
             <button className="px-4 py-2 bg-[#24c2a5] text-white rounded-lg hover:bg-[#1da88d]" onClick={() => setIsAvailable(true)}>
               Confirm Investment
             </button>
@@ -96,7 +81,7 @@ export default function InvestmentPage({ data }) {
      
         {isAvailable &&  (<div className="w-[80%] h-[10rem] absolute top-[15rem] left-[10%] drop-shadow-md rounded-md z-50 bg-[#1da88d] text-white text-xl font-semibold p-4 text-center justify-center  flex flex-col">
      <div className="w-[2rem] h-[2rem] rounded-full bg-red-700 text-white font-bold text-2xl flex justify-center items-center mb-[2rem] cursor-pointer" onClick={() => setIsAvailable(false)}>X</div>
-       {currentAccount ?  "Investment page still under construction 🏗️" : "Please connect wallet"}
+       {isConnected ?  "Investment page still under construction 🏗️" : "Please connect wallet"}
       </div>)
       
       }

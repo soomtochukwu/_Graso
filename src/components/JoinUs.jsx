@@ -1,53 +1,33 @@
-import { useEffect } from "react";
-import { ConnectButton, useCurrentAccount } from "@mysten/dapp-kit";
 import { useNavigate } from "react-router-dom";
-import AOS from "aos";
-import "aos/dist/aos.css";
-import "../components/banner/Banner";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useAccount } from "wagmi";
+import { useEffect } from "react";
 
 const JoinUs = () => {
-  const currentAccount = useCurrentAccount();
+  const { isConnected, address } = useAccount();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (currentAccount) {
+    if (isConnected && address) {
       navigate("/app");
     }
-  }, [currentAccount, navigate]);
-
-  useEffect(() => {
-    AOS.init({
-      duration: 500,
-      offset: 200,
-      once: true,
-    });
-  }, []);
+  }, [isConnected, address, navigate]);
 
   return (
-    <div className="join-us" data-aos="fade-up">
-      <div className="text" data-aos="fade-right">
-        <h1>Join us now</h1>
-        <p>Invest and Develop</p>
-        {/* <button className="join-us-btn" data-aos="zoom-in">
-          Get started
-        </button> */}
-        <div className="join-us-btn" data-aos="zoom-in">
-          <ConnectButton connectText="Get started" />
+    <section className="relative py-16 md:py-24 overflow-hidden bg-gradient-to-br from-[#f0fdf9] via-white to-[#e0f7ef]">
+      <div className="container mx-auto px-4 flex flex-col items-center text-center">
+        <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+          Ready to Start Investing?
+        </h2>
+        <p className="text-lg text-gray-600 mb-8 max-w-xl">
+          Join thousands of investors who are building their real estate
+          portfolios on Mantle Network with Graso.
+        </p>
+        <div className="custom-connect-button">
+          <ConnectButton label="Connect Wallet" />
         </div>
-        <img
-          src="https://github.com/chiscookeke11/Test-pagea/blob/main/sparkle.png.png?raw=true"
-          alt="star"
-          className="star-1"
-          data-aos="fade-left"
-        />
-        <img
-          src="https://github.com/chiscookeke11/Test-pagea/blob/main/sparkle.png.png?raw=true"
-          alt="star"
-          className="star-2"
-          data-aos="fade-right"
-        />
       </div>
-    </div>
+    </section>
   );
 };
 

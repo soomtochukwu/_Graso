@@ -1,84 +1,71 @@
-import { ConnectButton, useCurrentAccount } from "@mysten/dapp-kit";
-import {  Link, useNavigate } from "react-router-dom";
-import "./banner.css";
-import { useEffect } from "react";
-import { image } from "../images";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useAccount } from "wagmi";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
-const Banner = () => {
-  const currentAccount = useCurrentAccount();
+function Banner() {
+  const { isConnected, address } = useAccount();
   const navigate = useNavigate();
+  const [isNavigating, setIsNavigating] = useState(false);
 
-    useEffect(() => {
-      if (currentAccount) {
-        navigate("/app");
-      }
-    }, [currentAccount, navigate]);
+  useEffect(() => {
+    AOS.init({
+      duration: 1000,
+      once: true,
+    });
+  }, []);
+
+  useEffect(() => {
+    if (isConnected && address && !isNavigating) {
+      setIsNavigating(true);
+      navigate("/app");
+    }
+  }, [isConnected, address, navigate, isNavigating]);
+
   return (
-    <div className="mt-10 banner">
-      <div className="hero">
-        <div className="text">
-          <h1>Making Real Estate More Accessible to All</h1>
-          <p>
-            Bringing a better and faster means for developers to raise funds,
-            while giving individuals investors fractional ownership of real
-            world assets.
-          </p>
-          <div className="button-holder ">
+    <section
+      className="landing-banner pt-40 pb-[10rem] px-4 max-w-screen overflow-hidden bg-gradient-to-b from-white via-[#e6f9f5] to-[#f9f9f9]"
+      data-aos="fade-up"
+    >
+      <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
+        <h1
+          className="text-5xl md:text-6xl font-bold text-gray-900 mb-6"
+          data-aos="fade-up"
+        >
+          Invest in Real Estate with{" "}
+          <span className="text-[#24C2A5]">Blockchain</span>
+        </h1>
+        <p
+          className="text-lg md:text-xl text-gray-600 max-w-2xl mb-8"
+          data-aos="fade-up"
+          data-aos-delay="100"
+        >
+          Graso makes real estate investment accessible to everyone. Buy
+          fractional ownership in premium properties using cryptocurrency on
+          Mantle Network.
+        </p>
+        <div
+          className="flex flex-col sm:flex-row gap-4"
+          data-aos="fade-up"
+          data-aos-delay="200"
+        >
           <div className="custom-connect-button">
-              <ConnectButton connectText="Invest" />
-            </div>
-
-              <Link to="https://tnusbr02aa8.typeform.com/to/jcm0VFBm">
-            <button>
-              Develop
-            </button>
-              </Link>
-        
+            <ConnectButton label="Start Investing" />
           </div>
-        </div>
-        <div className="main-img">
-          <img src={image.MainImage} alt="" />
-          <div className="label">
-            <h4>STREAM</h4>
-            <p>Lagos, Nigeria</p>
-          </div>
-        </div>
-
-        <div className="asset-card assetcard1">
-          <img
-            src={image.bannerimg2}
-            alt="asset-card"
-          />
-          <h4>JOS ESTATE</h4>
-          <h5>Port Harcourt, Nigeria</h5>
-        </div>
-        <div className="asset-card assetcard2">
-          <img
-            src={image.bannerimg3}
-            alt="asset-card"
-          />
-          <h4>MONEYLAND</h4>
-          <h5>Calabar, Nigeria</h5>
-        </div>
-        <div className="asset-card assetcard3">
-          <img
-            src={image.bannerimg1}
-            alt="asset-card"
-          />
-          <h4>EVERCLEAR</h4>
-          <h5>Delta, Nigeria</h5>
-        </div>
-        <div className="asset-card assetcard4">
-          <img
-            src={image.bannerimg4}
-            alt="asset-card"
-          />
-          <h4>HOLA</h4>
-          <h5>Lagos, Nigeria.</h5>
+          <a
+            href="https://graso.gitbook.io/graso"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-8 py-3 bg-transparent text-[#24C2A5] border-2 border-[#24C2A5] rounded-full font-semibold hover:bg-[#24C2A5] hover:text-white transition-all duration-300"
+          >
+            Learn More
+          </a>
         </div>
       </div>
-    </div>
+    </section>
   );
-};
+}
 
 export default Banner;

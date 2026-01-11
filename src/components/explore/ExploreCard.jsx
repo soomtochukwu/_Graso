@@ -1,10 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Timer from "../Timer";
-// import landsite from "../../assets/landsite.jpg";
-import sui from "../../assets/sui.png";
+import mnt from "../../assets/mnt.png";
 import { Link, useLocation } from "react-router-dom";
-import { useSignAndExecuteTransaction } from "@mysten/dapp-kit";
+import { useAccount, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { contributeToCampaign, getProjectInfo } from "../../utils";
@@ -20,8 +19,8 @@ export default function ExploreCard({ data }) {
   const modalRef = useRef(null);
   const location = useLocation();
   const navigate = useNavigate();
-  const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
-  const [_digest, setDigest] = useState("");
+  const { isConnected, address } = useAccount();
+  const [txHash, setTxHash] = useState("");
 
 
   useEffect(() => {
@@ -45,36 +44,21 @@ export default function ExploreCard({ data }) {
 
   const handleContribute = async (e) => {
     e.preventDefault();
-    if (!contributionAmount) return;
+    if (!contributionAmount || !isConnected) return;
 
     setIsContributing(true);
 
-    // Convert contributionAmount to a BigInt
-    const amountInMicroSUI = BigInt(Number(contributionAmount) * 1e9);
-
-    const txn = await contributeToCampaign(
-      data.id,
-      Number(amountInMicroSUI)
-    );
-    signAndExecuteTransaction(
-      {
-        transaction: txn,
-        chain: "sui:testnet",
-      },
-      {
-        onSuccess: async (result) => {
-          const updatedCampaign = await getProjectInfo(data.id);
-          setCampaign(updatedCampaign);
-          setContributionAmount("");
-          setDigest(result.digest);
-          setIsContributing(false);
-          navigate("/dashboard");
-        },
-        onError: (error) => {
-          console.error("Error contributing:", error);
-        },
-      }
-    );
+    try {
+      const amountInMNT = Number(contributionAmount);
+      const hash = await contributeToCampaign(data.id, amountInMNT);
+      setTxHash(hash);
+      setContributionAmount("");
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Error contributing:", error);
+    } finally {
+      setIsContributing(false);
+    }
   };
 
   useEffect(() => {
@@ -104,7 +88,6 @@ export default function ExploreCard({ data }) {
       <div className="bg-white rounded-b-3xl rounded-t-[2rem] flex-grow overflow-hidden">
         <div className="p-4 w-full h-full flex flex-col justify-between">
           <img
-            // src={landsite}
             src={`https://gateway.pinata.cloud/ipfs/${data.image}?pinataGatewayToken=${import.meta.env.VITE_GATEWAY_TOKEN}`}
             className="w-full h-40 object-cover"
             alt={data.title}
@@ -153,7 +136,8 @@ export default function ExploreCard({ data }) {
             <div className="flex justify-between items-center">
               <small>Targeted Raise</small>
               <div className="flex mb-2 items-center gap-x-2">
-                <img src={sui} alt="Sui" className="w-[1rem] h-[1rem]" />
+                {/* <img src={mnt} alt="MNT" className="w-[1rem] h-[1rem]" /> */}
+                MNT
                 <h2>200,000</h2>
               </div>
             </div>
@@ -179,7 +163,7 @@ export default function ExploreCard({ data }) {
           <div className="flex justify-between items-center gap-4 pt-4">
             <div>
               <small className="font-semibold">Min.Entry</small>
-              <h1 className="text-teal-500 font-semibold">2.95 SUI</h1>
+              <h1 className="text-teal-500 font-semibold">2.95 MNT</h1>
             </div>
             <button
               className="hidden md:block bg-[#24c2a5] w-auto px-4 py-2 rounded-full text-white hover:border-solid hover:bg-white hover:text-[#24C2A5] transition-all duration-300"
@@ -221,10 +205,10 @@ export default function ExploreCard({ data }) {
                 <strong>Description:</strong> {data.description}
               </p>
               <p className="text-gray-600">
-                <strong>Targeted Raise:</strong> 200,000 SUI
+                <strong>Targeted Raise:</strong> 200,000 MNT
               </p>
               <p className="text-gray-600">
-                <strong>Min. Entry:</strong> 2.95 SUI
+                <strong>Min. Entry:</strong> 2.95 MNT
               </p>
             </div>
 
@@ -263,8 +247,8 @@ export default function ExploreCard({ data }) {
                 }}
               />
               <img
-                src={sui}
-                alt="Sui"
+                src={mnt}
+                alt="MNT"
                 className="w-[1.5rem] h-[1.5rem] absolute right-1 top-[2rem]"
               />
             </span>
