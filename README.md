@@ -1,8 +1,8 @@
-# GRASO - Mantle Sepolia Edition
+# GRASO
 
-Graso is a decentralized real estate investment platform powered by **Mantle Network**. Invest in fractional property ownership using cryptocurrency with full blockchain transparency.
+I built Graso as a decentralized real estate investment platform powered by **Mantle Network**. My goal is to enable fractional property ownership using cryptocurrency with full blockchain transparency.
 
-> **⚠️ This is the Mantle Sepolia Testnet version for development and testing.**
+> **⚠️ This is running on Mantle Sepolia Testnet for development and testing.**
 
 ## Quick Start
 
@@ -48,16 +48,16 @@ npm run dev
 
 ---
 
-## Features
+## What I Built
 
 ### 🏠 Real Estate Tokenization
 
-The platform tokenizes real estate assets using ERC-20 tokens, enabling fractional ownership:
+I implemented tokenization of real estate assets using ERC-20 tokens, enabling fractional ownership:
 
 - **Fractional Ownership**: Each property token represents a share of the property
-- **Fixed Supply**: Properties have a capped number of ownership units
-- **Transparent Pricing**: Token prices set at property creation
-- **On-chain Metadata**: Property details stored on blockchain
+- **Fixed Supply**: I set a capped number of ownership units per property
+- **Transparent Pricing**: Token prices are set at property creation
+- **On-chain Metadata**: I store property details directly on the blockchain
 
 **PropertyToken Contract Functions:**
 ```solidity
@@ -69,40 +69,40 @@ getOwnershipPercentage()   // View ownership %
 
 ### 🔐 KYC Verification (Simulated)
 
-The platform demonstrates compliance-aware access control:
+I built a compliance-aware access control demonstration:
 
 - **Verification Flow**: Multi-step identity verification modal
-- **On-chain Status**: KYC status stored in contract
+- **On-chain Status**: I store KYC status in the contract
 - **Gated Access**: Only verified users can invest/claim yield
 
-> **Note**: This is a simulated KYC flow for demo purposes. No real identity data is stored on-chain.
+> **Note**: This is a simulated KYC flow for demo purposes. I don't store real identity data on-chain.
 
 **How it works:**
 1. User attempts to invest
-2. If unverified, KYC modal appears
+2. If unverified, my KYC modal appears
 3. User completes verification form
 4. Admin approves on-chain (demo auto-approves)
 5. User can now invest
 
 ### 🏦 Custody Models
 
-The dashboard displays custody status to demonstrate asset holding patterns:
+I display custody status in the dashboard to demonstrate asset holding patterns:
 
 | Model | Description |
 |-------|-------------|
 | **Self-Custody** | Tokens held in user's wallet (direct control) |
 | **Platform Custody** | Tokens staked in protocol (enhanced yield) |
 
-Users can see their custody status and understand where assets are held.
+Users can see their custody status and understand where their assets are held.
 
 ### 💰 Yield Distribution
 
-Property managers can deposit rent, distributed proportionally to token holders:
+I implemented a system where property managers can deposit rent, distributed proportionally to token holders:
 
 - **Proportional Distribution**: Yield based on ownership percentage
 - **KYC Gated**: Only verified users can claim
-- **Transparent**: All transactions on Mantle Sepolia explorer
-- **Real-time**: Dashboard shows claimable yield
+- **Transparent**: All transactions visible on Mantle Sepolia explorer
+- **Real-time**: My dashboard shows claimable yield
 
 **Yield Contract Functions:**
 ```solidity
@@ -116,7 +116,7 @@ getTotalYieldClaimed()     // View historical claims
 
 ## Mantle Sepolia Network Setup
 
-Add to MetaMask manually or the app will prompt you automatically:
+Add to MetaMask manually or my app will prompt you automatically:
 
 | Setting | Value |
 |---------|-------|
@@ -135,7 +135,7 @@ Visit the [Mantle Sepolia Faucet](https://faucet.sepolia.mantle.xyz) to get test
 
 ```
 grs/
-├── contracts/                    # Solidity smart contracts
+├── contracts/                    # My Solidity smart contracts
 │   ├── contracts/
 │   │   ├── RealEstateIDO.sol     # Property listings
 │   │   └── PropertyToken.sol     # Tokenization + yield
@@ -156,16 +156,16 @@ grs/
 
 ---
 
-## Smart Contracts
+## My Smart Contracts
 
 ### RealEstateIDO.sol
-Manages property crowdfunding campaigns:
+I use this to manage property crowdfunding campaigns:
 - `createProperty()` - Create a new listing
 - `contribute()` - Invest in a campaign
 - `withdraw()` - Withdraw funds (creator only)
 
 ### PropertyToken.sol
-ERC-20 tokenization with compliance features:
+This is my ERC-20 tokenization contract with compliance features:
 - `buyTokens()` - Purchase property shares
 - `claimYield()` - Claim rental income
 - `setVerified()` - Admin KYC approval
@@ -177,7 +177,7 @@ ERC-20 tokenization with compliance features:
 
 > ⚠️ **TESTNET DEMO**
 > 
-> This application is a demonstration running on Mantle Sepolia testnet:
+> This application is a demonstration I built on Mantle Sepolia testnet:
 > - All tokens and transactions use test MNT with no real value
 > - KYC verification is simulated - no real identity verification
 > - No legal claims to real estate ownership are implied
@@ -185,9 +185,9 @@ ERC-20 tokenization with compliance features:
 
 > 🔒 **SECURITY**
 > 
-> - Never commit private keys
+> - I never commit private keys
 > - `.env` files are in `.gitignore`
-> - Smart contracts are unaudited demo code
+> - My smart contracts are unaudited demo code
 
 ---
 
@@ -203,6 +203,8 @@ ERC-20 tokenization with compliance features:
 
 ## Contributing
 
+I welcome contributions! Here's how:
+
 1. Fork the repository
 2. Create a feature branch: `git checkout -b feature/your-feature`
 3. Commit changes: `git commit -m 'Add feature'`
@@ -211,7 +213,7 @@ ERC-20 tokenization with compliance features:
 
 ---
 
-## Contact
+## Contact Me
 
 - **Email:** afrotechboss@yahoo.com
 - **GitHub:** [AfroTechBoss](https://github.com/AfroTechBoss)
