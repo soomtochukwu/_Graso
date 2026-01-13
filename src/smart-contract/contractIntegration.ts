@@ -1,9 +1,8 @@
 // Contract Integration for Mantle Sepolia
-// Replaces Sui-specific grasoContractIntegration.ts
+// Uses auto-generated contract data from deploy script
 
 import { createPublicClient, createWalletClient, http, custom, parseEther, formatEther } from 'viem';
-import { mantleSepolia, CONTRACT_ADDRESSES } from '../config/mantleConfig';
-import contractABI from './RealEstateIDO.json';
+import { mantleSepolia, CONTRACT_ADDRESSES, CONTRACT_ABIS } from '../config/mantleConfig';
 
 // Define the chain for viem
 const chain = {
@@ -61,7 +60,7 @@ export async function createProperty(
   
   const hash = await walletClient.writeContract({
     address: getContractAddress(),
-    abi: contractABI.abi,
+    abi: CONTRACT_ABIS.REAL_ESTATE_IDO,
     functionName: 'createProperty',
     args: [
       title,
@@ -88,7 +87,7 @@ export async function contribute(propertyId: number, amount: number) {
   
   const hash = await walletClient.writeContract({
     address: getContractAddress(),
-    abi: contractABI.abi,
+    abi: CONTRACT_ABIS.REAL_ESTATE_IDO,
     functionName: 'contribute',
     args: [BigInt(propertyId)],
     value: parseEther(amount.toString()),
@@ -107,7 +106,7 @@ export async function withdraw(propertyId: number) {
   
   const hash = await walletClient.writeContract({
     address: getContractAddress(),
-    abi: contractABI.abi,
+    abi: CONTRACT_ABIS.REAL_ESTATE_IDO,
     functionName: 'withdraw',
     args: [BigInt(propertyId)],
     account,
@@ -125,7 +124,7 @@ export async function finalizeCampaign(propertyId: number) {
   
   const hash = await walletClient.writeContract({
     address: getContractAddress(),
-    abi: contractABI.abi,
+    abi: CONTRACT_ABIS.REAL_ESTATE_IDO,
     functionName: 'finalizeCampaign',
     args: [BigInt(propertyId)],
     account,
@@ -165,7 +164,7 @@ export async function getPropertyInfo(propertyId: number): Promise<PropertyInfo 
   try {
     const result = await publicClient.readContract({
       address: getContractAddress(),
-      abi: contractABI.abi,
+      abi: CONTRACT_ABIS.REAL_ESTATE_IDO,
       functionName: 'getPropertyInfo',
       args: [BigInt(propertyId)],
     }) as any;
@@ -198,7 +197,7 @@ export async function getAllProperties(): Promise<PropertyInfo[]> {
   try {
     const result = await publicClient.readContract({
       address: getContractAddress(),
-      abi: contractABI.abi,
+      abi: CONTRACT_ABIS.REAL_ESTATE_IDO,
       functionName: 'getAllProperties',
       args: [],
     }) as any[];
@@ -231,7 +230,7 @@ export async function getContributors(propertyId: number): Promise<Contributor[]
   try {
     const result = await publicClient.readContract({
       address: getContractAddress(),
-      abi: contractABI.abi,
+      abi: CONTRACT_ABIS.REAL_ESTATE_IDO,
       functionName: 'getContributors',
       args: [BigInt(propertyId)],
     }) as any[];
@@ -254,7 +253,7 @@ export async function isContributor(propertyId: number, address: string): Promis
   try {
     const result = await publicClient.readContract({
       address: getContractAddress(),
-      abi: contractABI.abi,
+      abi: CONTRACT_ABIS.REAL_ESTATE_IDO,
       functionName: 'isContributor',
       args: [BigInt(propertyId), address as `0x${string}`],
     });
@@ -273,7 +272,7 @@ export async function getContribution(propertyId: number, address: string): Prom
   try {
     const result = await publicClient.readContract({
       address: getContractAddress(),
-      abi: contractABI.abi,
+      abi: CONTRACT_ABIS.REAL_ESTATE_IDO,
       functionName: 'getContribution',
       args: [BigInt(propertyId), address as `0x${string}`],
     });

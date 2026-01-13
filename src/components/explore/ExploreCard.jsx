@@ -7,6 +7,7 @@ import { useAccount, useWriteContract, useWaitForTransactionReceipt } from "wagm
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { contributeToCampaign, getProjectInfo } from "../../utils";
+import { getImageUrl } from "../../utils/api/files/route";
 
 export default function ExploreCard({ data }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -44,18 +45,38 @@ export default function ExploreCard({ data }) {
 
   const handleContribute = async (e) => {
     e.preventDefault();
-    if (!contributionAmount || !isConnected) return;
+    
+    console.log("🔵 Invest button clicked");
+    console.log("   Contribution amount:", contributionAmount);
+    console.log("   Is connected:", isConnected);
+    console.log("   Property ID:", data.id);
+    
+    if (!contributionAmount) {
+      alert("Please enter an amount to invest");
+      return;
+    }
+    
+    if (!isConnected) {
+      alert("Please connect your wallet first");
+      return;
+    }
 
     setIsContributing(true);
 
     try {
       const amountInMNT = Number(contributionAmount);
+      console.log("   Amount in MNT:", amountInMNT);
+      
       const hash = await contributeToCampaign(data.id, amountInMNT);
+      console.log("✅ Investment successful! TX:", hash);
+      
       setTxHash(hash);
       setContributionAmount("");
-      navigate("/dashboard");
+      alert("Investment successful!");
+      navigate("/app/investor");
     } catch (error) {
-      console.error("Error contributing:", error);
+      console.error("❌ Error contributing:", error);
+      alert(`Investment failed: ${error.message || error}`);
     } finally {
       setIsContributing(false);
     }
@@ -88,9 +109,13 @@ export default function ExploreCard({ data }) {
       <div className="bg-white rounded-b-3xl rounded-t-[2rem] flex-grow overflow-hidden">
         <div className="p-4 w-full h-full flex flex-col justify-between">
           <img
-            src={`https://gateway.pinata.cloud/ipfs/${data.image}?pinataGatewayToken=${import.meta.env.VITE_GATEWAY_TOKEN}`}
-            className="w-full h-40 object-cover"
+            src={getImageUrl(data.image) || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect fill='%2324C2A5' width='400' height='200'/%3E%3Ctext fill='white' x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-family='Arial' font-size='16'%3EProperty Image%3C/text%3E%3C/svg%3E"}
+            className="w-full h-40 object-cover rounded-lg"
             alt={data.title}
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect fill='%2324C2A5' width='400' height='200'/%3E%3Ctext fill='white' x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-family='Arial' font-size='16'%3EProperty Image%3C/text%3E%3C/svg%3E";
+            }}
           />
           <div className="flex-grow">
             <h1 className="font-bold pt-4 text-2xl">{data.title}</h1>
@@ -138,7 +163,7 @@ export default function ExploreCard({ data }) {
               <div className="flex mb-2 items-center gap-x-2">
                 {/* <img src={mnt} alt="MNT" className="w-[1rem] h-[1rem]" /> */}
                 MNT
-                <h2>200,000</h2>
+                <h2>{Number(data.price).toLocaleString()}</h2>
               </div>
             </div>
             <progress max="15" value={(Number(data.currentAmount) / Number(data.price)).toFixed(1)} />
@@ -191,9 +216,13 @@ export default function ExploreCard({ data }) {
           >
             <h2 className="text-xl font-bold mb-4">{data.name} - Investment</h2>
             <img
-              src={`https://gateway.pinata.cloud/ipfs/${data.image}?pinataGatewayToken=${import.meta.env.VITE_GATEWAY_TOKEN}`}
+              src={getImageUrl(data.image) || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect fill='%2324C2A5' width='400' height='200'/%3E%3Ctext fill='white' x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-family='Arial' font-size='16'%3EProperty Image%3C/text%3E%3C/svg%3E"}
               alt="Property"
               className="w-full h-40 object-cover rounded-lg mb-4"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect fill='%2324C2A5' width='400' height='200'/%3E%3Ctext fill='white' x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-family='Arial' font-size='16'%3EProperty Image%3C/text%3E%3C/svg%3E";
+              }}
             />
 
             {/* Property Details */}
@@ -205,7 +234,7 @@ export default function ExploreCard({ data }) {
                 <strong>Description:</strong> {data.description}
               </p>
               <p className="text-gray-600">
-                <strong>Targeted Raise:</strong> 200,000 MNT
+                <strong>Targeted Raise:</strong> {Number(data.price).toLocaleString()} MNT
               </p>
               <p className="text-gray-600">
                 <strong>Min. Entry:</strong> 2.95 MNT
@@ -243,13 +272,7 @@ export default function ExploreCard({ data }) {
                   borderRadius: "4px",
                   border: "1px",
                   outline: "none",
-                  textAlign: "left",
                 }}
-              />
-              <img
-                src={mnt}
-                alt="MNT"
-                className="w-[1.5rem] h-[1.5rem] absolute right-1 top-[2rem]"
               />
             </span>
 

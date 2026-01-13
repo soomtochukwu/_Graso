@@ -7,7 +7,7 @@ import "leaflet/dist/leaflet.css";
 import { OpenStreetMapProvider, GeoSearchControl } from "leaflet-geosearch";
 import "leaflet-geosearch/dist/geosearch.css";
 import "./addproperties.css";
-import { uploadFileToPinata } from "../../utils/api/files/route";
+import { uploadFile, uploadPropertyMetadata } from "../../utils/api/files/route";
 
 function AddProperties() {
   const { isConnected, address } = useAccount();
@@ -107,26 +107,24 @@ function AddProperties() {
     setEndDate(date);
   };
 
-  const uploadFile = async (fileToUpload) => {
+  const handleUpload = async (fileToUpload) => {
     try {
       setUploading(true);
-  
-      const formData = new FormData();
-      formData.append("file", fileToUpload, `${fileToUpload.name}`);
-  
-      const simulatedRequest = {
-        formData: async () => formData,
-      };
-  
-      const response = await uploadFileToPinata(simulatedRequest);
-  
-      if (response?.data?.IpfsHash) {
-        setCid(response?.data?.IpfsHash);
+      console.log("🖼️ Initiating image upload for:", fileToUpload.name);
+      
+      const result = await uploadFile(fileToUpload);
+      
+      if (result?.cid) {
+        setCid(result.cid);
+        console.log("✅ Image CID saved to state:", result.cid);
+        alert(`Image uploaded successfully!\nCID: ${result.cid.substring(0, 20)}...`);
       } else {
-        console.error("Upload failed", response);
+        console.error("❌ Upload returned but no CID!");
+        alert("Image upload failed: No CID returned. Please try again.");
       }
     } catch (error) {
-      console.error("Error uploading file:", error);
+      console.error("❌ Error uploading image:", error);
+      alert(`Image upload failed: ${error.message}\n\nPlease check your PINATA_JWT token and try again.`);
     } finally {
       setUploading(false);
     }
@@ -134,7 +132,7 @@ function AddProperties() {
   
   const handleChange = (e) => {
 		setFile(e.target.files[0]);
-		uploadFile(e.target.files[0]);
+		handleUpload(e.target.files[0]);
 	};
 
   const handleSubmit = async (e) => {
@@ -145,23 +143,60 @@ function AddProperties() {
       return;
     }
 
+    // Validate image was uploaded to IPFS first
+    if (!cid) {
+      alert("Please upload a property image first. Wait for the upload to complete before submitting.");
+      return;
+    }
+
+    // Validate CID format (should start with 'baf' or 'Qm')
+    if (!cid.startsWith("baf") && !cid.startsWith("Qm")) {
+      alert("Invalid image upload. Please re-upload the property image.");
+      return;
+    }
+
     const deadlineTimestamp = Math.floor(new Date(endDate).getTime() / 1000);
     
     setIsSubmitting(true);
     
     try {
+      // Step 1: Upload all property metadata to IPFS first
+      console.log("Step 1: Uploading property metadata to IPFS...");
+      const metadata = {
+        title,
+        description,
+        propertyType: propertytype,
+        imageCid: cid,
+        price: Number(price),
+        latitude: lat,
+        longitude: lng,
+        createdAt: Date.now(),
+      };
+      
+      const metadataResult = await uploadPropertyMetadata(metadata);
+      console.log("Metadata pinned to IPFS with CID:", metadataResult.cid);
+
+      // Step 2: Create property on-chain with the image CID
+      console.log("Step 2: Creating property on blockchain...");
+      console.log("   Title:", title);
+      console.log("   Property Type:", propertytype);
+      console.log("   Image CID:", cid);
+      
       const txHash = await createProperty(
         title,
         description,
-        cid,
-        propertytype,
+        propertytype,  // propertyType comes BEFORE image
+        cid,           // Image CID for on-chain storage
         price,
         deadlineTimestamp,
         lat,
         lng
       );
 
-      console.log("Property created, tx hash:", txHash);
+      console.log("Property created successfully!");
+      console.log("- Metadata CID:", metadataResult.cid);
+      console.log("- Transaction hash:", txHash);
+      
       navigate('/app/explore-properties');
     } catch (error) {
       console.error('Error creating property:', error);
